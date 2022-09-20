@@ -1,0 +1,218 @@
+setTimeout(function () {
+
+    var id, next_port_portId, next_port_locode, next_port_iso2, next_port_name, next_port_eta, next_port_latitude, next_port_longitude, last_port_portId, last_port_locode, last_port_iso2, last_port_name, last_port_atd, last_port_latitude, last_port_longitude, port_last_is_ongoing, vessel_vesselId, vessel_name, vessel_mmsi, vessel_imo, vessel_icon, vessel_latitude, vessel_longitude, vessel_orientation, vessel_is_moving, vessel_speed, vessel_pos_speed, vessel_draught, vessel_pos_received, vessel_eta_received, vessel_eta, vessel_destination, vessel_url, provider_described_type
+
+    vessel_vesselId = window.location.href.split("/shipid:")[1].split("/")[0].trim() * 1;
+    vessel_name = window.location.href.split("/vessel:")[1].trim();
+    vessel_mmsi = window.location.href.split("/mmsi:")[1].split("/imo:")[0].trim() * 1;
+    vessel_imo = window.location.href.split("/imo:")[1].split("/vessel:")[0].trim() * 1;
+
+	voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-caption MuiTypography-colorTextSecondary MuiTypography-displayBlock");
+    for (i = 1; i < voyage.length; i++) {
+		if (typeof voyage[i] == 'undefined' && voyage[i] == null) {} else { 
+			next_port_name = voyage[i].textContent;
+		}
+	}
+
+    voyage = document.getElementsByClassName("MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h5 MuiTypography-colorTextPrimary");
+    if (typeof voyage[1] != 'undefined' && voyage[0] != null) {
+        ace = voyage[1].textContent.split(":")[0];
+        next_port_locode = voyage[1].textContent.replaceAll(" ", "");
+		next_port_iso2 = next_port_locode.match(/[\s\S]{1,2}/g)[0];
+    }
+
+	voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-caption MuiTypography-colorTextSecondary MuiTypography-displayBlock");
+    for (i = 1; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+			next_port_name = voyage[i].textContent.split(":")[0];
+			vessel_destination = voyage[i].textContent.split(":")[0];
+		}
+	}
+
+	voyage = document.getElementsByClassName("MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            ace = voyage[i].textContent.split(":")[0];
+            if (ace == "ETA") {
+				const dateInitial = voyage[i].textContent.split("ETA:")[1];
+                utcAdjustment = dateInitial.trim().split("(UTC ")[1].split(")")[0]*1;
+                strDate = dateInitial.trim().split(" ")[0];
+                strTime = dateInitial.trim().split(" ")[1];
+                aDate = strDate + "T" + strTime;
+                const date = new Date(aDate)
+				aUTCMinutes = 60 * utcAdjustment;
+				var then = new Date(aDate);
+				then.setMinutes(then.getMinutes() - aUTCMinutes);
+				then = new Date(then); // Date object
+				next_port_eta = then.toISOString().slice(0, 10) + ' ' + then.toTimeString().split(" GMT")[0];
+            }
+            if (ace == "ATA") {
+                const dateInitial = voyage[i].textContent.split("ATA:")[1];
+                utcAdjustment = dateInitial.trim().split("(UTC ")[1].split(")")[0]*1;
+                strDate = dateInitial.trim().split(" ")[0];
+                strTime = dateInitial.trim().split(" ")[1];
+                aDate = strDate + "T" + strTime;
+                const date = new Date(aDate)
+				aUTCMinutes = 60 * utcAdjustment;
+				var then = new Date(aDate);
+				then.setMinutes(then.getMinutes() - aUTCMinutes);
+				then = new Date(then); // Date object
+				next_port_eta = then.toISOString().slice(0, 10) + ' ' + then.toTimeString().split(" GMT")[0];				
+            }
+        }
+    }
+	
+	voyage = document.getElementsByClassName("MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-h5 MuiTypography-colorTextPrimary");
+    if (typeof voyage[0] != 'undefined' && voyage[0] != null) {
+        ace = voyage[0].textContent.split(":")[0];
+        last_port_locode = voyage[0].textContent.replaceAll(" ", "");
+		last_port_iso2 = last_port_locode.match(/[\s\S]{1,2}/g)[0];
+		
+    }
+
+	voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-caption MuiTypography-colorTextSecondary MuiTypography-displayBlock");
+    for (i = 0; i < voyage.length -1 ; i++) {
+		if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+			last_port_name = voyage[i].textContent;
+		}
+	}
+	
+	voyage = document.getElementsByClassName("MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            ace = voyage[i].textContent.split(":")[0];
+            if (ace == "ATD") {
+                const dateInitial = voyage[i].textContent.split("ATD:")[1];
+				utcAdjustment = dateInitial.trim().split("(UTC ")[1].split(")")[0]*1;
+                strDate = dateInitial.trim().split(" ")[0];
+                strTime = dateInitial.trim().split(" ")[1];
+                aDate = strDate + "T" + strTime;
+                const date = new Date(aDate)
+				aUTCMinutes = 60 * utcAdjustment;
+				var then = new Date(aDate);
+				then.setMinutes(then.getMinutes() - aUTCMinutes);
+				then = new Date(then); // Date object
+				last_port_atd = then.toISOString().slice(0, 10) + ' ' + then.toTimeString().split(" GMT")[0];									
+            }
+        }
+    }	
+
+    voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            ace = voyage[i].textContent.split(":")[0];
+            if (ace == "Latitude / Longitude") {
+                vessel_latitude = voyage[i].textContent.split("Latitude / Longitude: ")[1].split("°")[0] * 1;
+                vessel_longitude = voyage[i].textContent.split("Latitude / Longitude: ")[1].split("/ ")[1].split("°")[0] * 1;
+            }
+        }
+    }
+
+    voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            if (voyage[i].textContent.includes(":") == true) {
+                ace = voyage[i].textContent.split(":")[0];
+                if (ace == "Position Received") {
+                    vessel_pos_received = voyage[i].textContent.split("Position Received: ")[1].split("UTC")[0].trim();
+                }
+            }
+        }
+    }
+
+	voyage = document.getElementsByClassName("MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            ace = voyage[i].textContent.split(":")[0];
+		
+			if (ace == "Speed/Course") {
+				vessel_speed = voyage[i].textContent.split(":")[1].split(" kn")[0] * 1;
+				vessel_orientation = voyage[i].textContent.split("/ ")[1].replace(" °","").trim() * 1;
+			}
+        }
+    }
+
+	voyage = document.getElementsByClassName("MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6");
+    for (i = 0; i < voyage.length; i++) {
+        if (typeof voyage[i] != 'undefined' && voyage[i] != null) {
+            ace = voyage[i].textContent.split(":")[0];
+            if (ace == "ETA") {
+                const dateInitial = voyage[i].textContent.split("ETA:")[1];
+				utcAdjustment = dateInitial.trim().split("(UTC ")[1].split(")")[0]*1;
+                strDate = dateInitial.trim().split(" ")[0];
+                strTime = dateInitial.trim().split(" ")[1];
+                aDate = strDate + "T" + strTime;
+                const date = new Date(aDate)
+				aUTCMinutes = 60 * utcAdjustment;
+				var then = new Date(aDate);
+				then.setMinutes(then.getMinutes() - aUTCMinutes);
+				then = new Date(then); // Date object
+				vessel_eta = then.toISOString().slice(0, 10) + ' ' + then.toTimeString().split(" GMT")[0];
+            }
+            if (ace == "ATA") {
+                const dateInitial =  voyage[i].textContent.split("ATA:")[1];
+				utcAdjustment = dateInitial.trim().split("(UTC ")[1].split(")")[0]*1;
+                strDate = dateInitial.trim().split(" ")[0];
+                strTime = dateInitial.trim().split(" ")[1];
+                aDate = strDate + "T" + strTime;
+                const date = new Date(aDate)
+				aUTCMinutes = 60 * utcAdjustment;
+				var then = new Date(aDate);
+				then.setMinutes(then.getMinutes() - aUTCMinutes);
+				then = new Date(then); // Date object
+				vessel_eta = then.toISOString().slice(0, 10) + ' ' + then.toTimeString().split(" GMT")[0];
+            }
+        }
+    }
+	
+	
+    vessel_url = window.location.href;
+    provider_described_type = window.location.href.split("www.")[1].split(".")[0];
+	
+    fetch('https://datapoints.xcl.one/api/Source1Moment', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            next_port_portId,
+            next_port_locode,
+            next_port_iso2,
+            next_port_name,
+            next_port_eta,
+            next_port_latitude,
+            next_port_longitude,
+            last_port_portId,
+            last_port_locode,
+            last_port_iso2,
+            last_port_name,
+            last_port_atd,
+            last_port_latitude,
+            last_port_longitude,
+            vessel_vesselId,
+            vessel_name,
+            vessel_mmsi,
+            vessel_imo,
+            vessel_icon,
+            vessel_latitude,
+            vessel_longitude,
+            vessel_orientation,
+            vessel_speed,
+            vessel_pos_speed,
+            vessel_draught,
+            vessel_pos_received,
+            vessel_eta_received,
+            vessel_eta,
+            vessel_destination,
+            vessel_url,
+            provider_described_type
+            })
+        }).then(res => res.json())
+        .then(res => {
+			console.log(res);
+			alert("success");
+			}
+);
+}, 10000);

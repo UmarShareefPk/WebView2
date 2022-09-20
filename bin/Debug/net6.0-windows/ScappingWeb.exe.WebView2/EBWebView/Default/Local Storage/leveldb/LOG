@@ -1,0 +1,6 @@
+2022/07/22-22:55:19.298 6ed0 Reusing MANIFEST D:\GitHub\__Mine\DotNet\ScappingWeb\bin\Debug\net6.0-windows\ScappingWeb.exe.WebView2\EBWebView\Default\Local Storage\leveldb/MANIFEST-000001
+2022/07/22-22:55:19.299 6ed0 Recovering log #7
+2022/07/22-22:55:19.300 6ed0 Reusing old log D:\GitHub\__Mine\DotNet\ScappingWeb\bin\Debug\net6.0-windows\ScappingWeb.exe.WebView2\EBWebView\Default\Local Storage\leveldb/000007.log 
+2022/07/22-23:02:25.866 6ed0 Level-0 table #10: started
+2022/07/22-23:02:25.872 6ed0 Level-0 table #10: 15685 bytes OK
+2022/07/22-23:02:25.884 6ed0 Delete type=0 #7
