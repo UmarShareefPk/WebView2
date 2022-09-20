@@ -14,8 +14,8 @@ project.lock.json
 *.user
 *.userosscache
 *.sln.docstates
-bin
-
+/bin
+/obj
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
